@@ -9,14 +9,12 @@ const argv1 = yargs(hideBin(process.argv))
     .option('file', {
         alias: 'f'
     }).argv
-//console.log(argv1.f)
 
 const pathexist = path.join(__dirname, argv1.f)
-//console.log('pathexist: ',pathexist)
 
  if(!fs.existsSync(pathexist))
  {
-     fs.writeFileSync(pathexist,'first','utf8')
+     fs.writeFileSync(pathexist,'','utf8')
  }
 
  const firstData = fs.readFileSync(pathexist,'utf8')
@@ -30,27 +28,24 @@ const stream = fs.createWriteStream(
     'utf8'
 );
 stream.on('error', (err) => console.log(`Err: ${err}`));
-stream.on('finish', () => console.log('Done'));
+stream.on('finish', () => console.log('конец'));
 stream.write(firstData);
 
 function game() {
     console.log(targetNumber)
-    input.question( 'введите 1 или 2',(luckyNumber) =>{
-        console.log('luckyNumber',luckyNumber)
-        console.log('targetNumber',targetNumber)
-        console.log('luckyNumber!=1',luckyNumber!=1)
-        console.log('luckyNumber!=2',luckyNumber!=2)
+    input.question( 'введите 1 или 2 \n',(luckyNumber) =>{
+
         if(luckyNumber!=1 && luckyNumber!=2){
-            console.log(' ввели не подходящие числа, попробуите еще раз')
+            console.log(' ввели не подходящие числа, попробуите еще раз\n')
             game()
         }
         else {
             if (luckyNumber == targetNumber) {
                 console.log('вы угадали!')
-                stream.write('Угадал\n');
+                stream.write('{result:true},\n');
             } else {
                 console.log('вы  не угадали!')
-                stream.write('Не Угадал\n');
+                stream.write('{result:false},\n');
             }
             stream.end();
             input.close()
@@ -60,5 +55,3 @@ function game() {
 
 
 game()
-//
-console.log('конец')
