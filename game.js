@@ -10,26 +10,12 @@ const argv1 = yargs(hideBin(process.argv))
         alias: 'f'
     }).argv
 
-const pathexist = path.join(__dirname, argv1.f)
-
- if(!fs.existsSync(pathexist))
- {
-     fs.writeFileSync(pathexist,'','utf8')
- }
-
- const firstData = fs.readFileSync(pathexist,'utf8')
-console.log(firstData)
+const pathFile = path.join(__dirname, argv1.f)
 
 let   targetNumber = (Math.random()<.5)+1;
 console.log('число для угадывания:',targetNumber)
 
-const stream = fs.createWriteStream(
-    pathexist,
-    'utf8'
-);
-stream.on('error', (err) => console.log(`Err: ${err}`));
-stream.on('finish', () => console.log('конец'));
-stream.write(firstData);
+
 
 function game() {
     console.log(targetNumber)
@@ -42,12 +28,15 @@ function game() {
         else {
             if (luckyNumber == targetNumber) {
                 console.log('вы угадали!')
-                stream.write('{result:true},\n');
+                fs.appendFile(pathFile,'true,\n',err => {if (err) throw new Error(err)
+                    console.log('Ok');});
+
             } else {
                 console.log('вы  не угадали!')
-                stream.write('{result:false},\n');
+                fs.appendFile(pathFile,'false,\n',err => {if (err) throw new Error(err)
+                    console.log('Ok');});
+
             }
-            stream.end();
             input.close()
         }
     })
